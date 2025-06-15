@@ -1,42 +1,64 @@
-using System.Net.Http.Json;
-
-using Google.Apis.YouTube.v3;
+// Program.cs  ──────────────────────────────────────────────────────────
+using ClonePlayWeb.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using System.Threading;
 
-using ClonePlayWeb.Services;
-
+// ── DI & host setup ───────────────────────────────────────────────────
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<YouTubeAuth>();              // our auth helper
+
 var app = builder.Build();
 
-app.UseDefaultFiles(); 
-// app.UseHttpsRedirection();
+// ── Static files / default index.html (optional) ──────────────────────
+app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseRouting();
 
-app.MapPost("/clone", async (HttpContext http) =>
+// ── 1.  /login  → send user to Google consent page ────────────────────
+app.MapGet("/login", (YouTubeAuth auth, HttpContext ctx) =>
 {
-    var form = await http.Request.ReadFromJsonAsync<CloneRequest>();
+    ctx.Response.Redirect(auth.GetAuthUrl());               // 302 → Google
+});
 
-    if (form == null)
-        return Results.BadRequest("invalid input");
+// ── 2.  /oauth2callback  → Google redirects back here ────────────────
+app.MapGet("/oauth2callback", async (
+        string          code,                               // ?code=…
+        YouTubeAuth     auth,
+        HttpContext     ctx,
+        CancellationToken ct) =>
+{
+    await auth.ExchangeAsync(code, ct);                     // fetch tokens
+    ctx.Response.Redirect("/");                             // back home
+});
 
-    var ytAuth = new YouTubeAuth();
-    var ytService = await ytAuth.Login();
+// ── 3.  /clone  → clone a playlist after user is authorised ──────────
+app.MapPost("/clone", async (
+        CloneRequest    req,
+        YouTubeAuth     auth,
+        CancellationToken ct) =>
+{
+    // validate body
+    if (string.IsNullOrWhiteSpace(req.SourcePlaylistId) ||
+        string.IsNullOrWhiteSpace(req.NewTitle))
+        return Results.BadRequest("sourcePlaylistId and newTitle required.");
 
-    var helper = new YouTubeHelper(ytService);
+    // ensure user has logged in
+    var ytService = auth.TryGetService();
+    if (ytService is null) return Results.Unauthorized();
 
-    var targetPlaylistId = await helper.CreatePlaylist(form.NewTitle, "Cloned via web");
+    // do the cloning
+    var helper          = new YouTubeHelper(ytService);
+    var newPlaylistId   = await helper.CreatePlaylist(req.NewTitle, "Cloned via web");
+    var videoIds        = await helper.GetPlaylistVideoIds(req.SourcePlaylistId, ct);
 
-    var videoIds = await helper.GetPlaylistVideoIds(form.SourcePlaylistId);
+    foreach (var vid in videoIds)
+        await helper.AddVideoToPlaylist(newPlaylistId, vid, ct);
 
-    foreach (var videoId in videoIds)
-        await helper.AddVideoToPlaylist(targetPlaylistId, videoId);
-
-    return Results.Ok($"Cloned to Playlist Id: {targetPlaylistId}");
+    return Results.Ok(new { clonedTo = newPlaylistId });
 });
 
 app.Run();
 
-record CloneRequest(string SourcePlaylistId, string NewTitle);
+// ── record type for JSON body binding ─────────────────────────────────
+public record CloneRequest(string SourcePlaylistId, string NewTitle);
