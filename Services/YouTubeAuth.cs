@@ -35,7 +35,7 @@ public class YouTubeAuth
 
     // Generates Google consent URL
     public string GetAuthUrl() =>
-        _flow.CreateAuthorizationCodeRequest(_redirectUri).Build();
+     _flow.CreateAuthorizationCodeRequest(_redirectUri).Build().ToString();
 
     // Exchanges ?code=… for access + refresh tokens
     public async Task<YouTubeService> ExchangeAsync(string code, CancellationToken ct)

@@ -37,7 +37,7 @@ namespace ClonePlayWeb.Services
             return response.Id;
         }
 
-        public async Task<List<string>> GetPlaylistVideoIds(string playlistId)
+        public async Task<List<string>> GetPlaylistVideoIds(string playlistId, string accessToken)
         {
             var videoIds = new List<string>();
 
