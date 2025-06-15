@@ -37,6 +37,16 @@
         background-color: rgb(206, 205, 205);
         transform: scale(1.03);
       }
+      #loginBtn {
+        margin-bottom: 20px;
+      }
+      .steps {
+        text-wrap: word-wrap;
+        border: solid 3px rgb(69, 34, 34);
+        padding: 2 10 2 10;
+        width: 500px;
+        font-size: x-large;
+      }
     </style>
   </head>
   <body>
@@ -61,6 +71,15 @@
 
       <button type="submit" class="submitBtn">Clone</button>
     </form>
+
+    <div class="steps">
+      <p>
+        Paste the partial link of the playlist here. The full link wont work,
+        for eg. https://www.youtube.com/watch?v=bxgwVjW5SQE&list=
+        'PLxAJU9ros09Cgi6R-hxGmA4clMlNVtgb7' &pp=gAQB0gcJCWMEOCosWNin, the text
+        inside '...' would be the playlist's partial link
+      </p>
+    </div>
 
     <p id="result"></p>
 
@@ -88,10 +107,10 @@
             }),
           });
 
-          const text = await res.text();
+          const data = await res.json();
           document.getElementById("result").innerText = res.ok
-            ? text
-            : "❌ " + text;
+            ? `✅ Cloned the playlist successfully! Playlist ID: ${data.clonedTo}`
+            : "❌ " + data;
         });
     </script>
   </body>
