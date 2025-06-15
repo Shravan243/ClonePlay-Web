@@ -50,7 +50,7 @@ app.MapPost("/clone", async (
     // do the cloning
     var helper          = new YouTubeHelper(ytService);
     var newPlaylistId   = await helper.CreatePlaylist(req.NewTitle, "Cloned via web");
-    var videoIds        = await helper.GetPlaylistVideoIds(req.SourcePlaylistId, ct);
+    var videoIds        = await helper.GetPlaylistVideoIds(req.SourcePlaylistId);
 
     foreach (var vid in videoIds)
         await helper.AddVideoToPlaylist(newPlaylistId, vid, ct);
