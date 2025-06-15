@@ -47,6 +47,16 @@
         width: 500px;
         font-size: x-large;
       }
+      #result {
+        margin-top: 20px;
+        padding: 15px;
+        border: 2px solid green;
+        background-color: #eaffea;
+        border-radius: 8px;
+        display: none;
+        font-weight: bold;
+        color: #1a4d1a;
+      }
     </style>
   </head>
   <body>
@@ -108,9 +118,12 @@
           });
 
           const data = await res.json();
-          document.getElementById("result").innerText = res.ok
-            ? `✅ Cloned the playlist successfully! Playlist ID: ${data.clonedTo}`
-            : "❌ " + data;
+
+          const resultBox = document.getElementById("result");
+          resultBox.style.display = "block";
+          resultBox.innerText = res.ok
+            ? "Playlist cloned successfully!"
+            : "Couldn't clone. " + text;
         });
     </script>
   </body>
