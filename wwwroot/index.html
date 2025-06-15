@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>ClonePlay</title>
+
+    <style>
+      body {
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        background-color: antiquewhite;
+        flex-direction: column;
+      }
+      #cloneForm {
+        /* margin-top: 12%; */
+        border: solid 5px burlywood;
+        background-color: blanchedalmond;
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      h1 {
+        margin-top: 15%;
+      }
+      label {
+        justify-content: center;
+        align-items: center;
+      }
+      .submitBtn {
+        border: solid 2px rgb(206, 205, 205);
+        background-color: aliceblue;
+        transition: transform 0.2s ease;
+        border-radius: 7px;
+      }
+      .submitBtn:hover {
+        background-color: rgb(206, 205, 205);
+        transform: scale(1.03);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Clone YouTube Playlist</h1>
+    <form id="cloneForm">
+      <label>Source Playlist ID:</label><br />
+      <input
+        type="text"
+        id="sourceId"
+        placeholder="PLxAJU9ros09AL2qQVEdh7s4gfYvz8S9TM"
+      /><br /><br />
+
+      <label>New Playlist Name:</label><br />
+      <input
+        type="text"
+        id="newName"
+        placeholder="Cloned Playlist"
+      /><br /><br />
+
+      <button type="submit" class="submitBtn">Clone</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+      document
+        .getElementById("cloneForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const sourceId = document.getElementById("sourceId").value;
+          const newName = document.getElementById("newName").value;
+
+          const res = await fetch("/clone", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sourcePlaylistId: sourceId,
+              newTitle: newName,
+            }),
+          });
+
+          const text = await res.text();
+          document.getElementById("result").innerText = res.ok
+            ? text
+            : "❌ " + text;
+        });
+    </script>
+  </body>
+</html>

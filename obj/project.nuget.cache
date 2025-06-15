@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "tGx1xlTxL4s=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\banga\\ACAD\\ClonePlayWeb\\ClonePlayWeb.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\banga\\.nuget\\packages\\google.apis\\1.70.0\\google.apis.1.70.0.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\google.apis.auth\\1.70.0\\google.apis.auth.1.70.0.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\google.apis.core\\1.70.0\\google.apis.core.1.70.0.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\google.apis.oauth2.v2\\1.68.0.1869\\google.apis.oauth2.v2.1.68.0.1869.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\google.apis.youtube.v3\\1.69.0.3764\\google.apis.youtube.v3.1.69.0.3764.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\system.codedom\\7.0.0\\system.codedom.7.0.0.nupkg.sha512",
+    "C:\\Users\\banga\\.nuget\\packages\\system.management\\7.0.2\\system.management.7.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
