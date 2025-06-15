@@ -53,7 +53,7 @@ app.MapPost("/clone", async (
     var videoIds        = await helper.GetPlaylistVideoIds(req.SourcePlaylistId);
 
     foreach (var vid in videoIds)
-        await helper.AddVideoToPlaylist(newPlaylistId, vid, ct);
+        await helper.AddVideoToPlaylist(newPlaylistId, vid);
 
     return Results.Ok(new { clonedTo = newPlaylistId });
 });
