@@ -41,6 +41,9 @@
   </head>
   <body>
     <h1>Clone YouTube Playlist</h1>
+
+    <button id="loginBtn" class="submitBtn">Login with Google</button>
+
     <form id="cloneForm">
       <label>Source Playlist ID:</label><br />
       <input
@@ -62,6 +65,12 @@
     <p id="result"></p>
 
     <script>
+      // Login button logic
+      document.getElementById("loginBtn").addEventListener("click", () => {
+        window.location.href = "/login";
+      });
+
+      // Clone form logic
       document
         .getElementById("cloneForm")
         .addEventListener("submit", async (e) => {
