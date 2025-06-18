@@ -322,14 +322,6 @@
     <footer>akdjfhjhkafhdk</footer>
 
     <script>
-      form.addEventListener("submit", () => {
-        // Save original button text
-        btn.dataset.originalText = btn.textContent;
-
-        // Show loading state
-        btn.textContent = "Cloning…";
-        btn.disabled = true;
-      });
       function extractPlaylistId(str) {
         const form = document.getElementById("cloneForm");
         const btn = document.getElementById("cloneBtn");
