@@ -309,7 +309,7 @@
           placeholder="Cloned Playlist"
         /><br /><br />
 
-        <button type="submit" class="submitBtn">Clone</button>
+        <button type="submit" class="submitBtn" id="cloneBtn">Clone</button>
       </form>
     </div>
     <button id="loginBtn" class="submitBtn">Login with Google</button>
@@ -322,7 +322,17 @@
     <footer>akdjfhjhkafhdk</footer>
 
     <script>
+      form.addEventListener("submit", () => {
+        // Save original button text
+        btn.dataset.originalText = btn.textContent;
+
+        // Show loading state
+        btn.textContent = "Cloning…";
+        btn.disabled = true;
+      });
       function extractPlaylistId(str) {
+        const form = document.getElementById("cloneForm");
+        const btn = document.getElementById("cloneBtn");
         const m = str.match(/[?&]list=([a-zA-Z0-9_-]+)/);
         return (m ? m[1] : str).trim(); // returns clean ID
       }
